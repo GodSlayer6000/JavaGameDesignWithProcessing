@@ -16,8 +16,8 @@ import java.io.IOException;
 public class Game extends PApplet {
 
 /* Game Class Starter File
- * Last Edit: 12/13/2022
- * Authors: _____________________
+ * Last Edit: 5/15/2023
+ * Authors: Oscar Ahuatl & Saifur Rahman
  */
 
 //GAME VARIABLES
