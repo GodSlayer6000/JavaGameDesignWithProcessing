@@ -1,6 +1,6 @@
 /* Game Class Starter File
- * Last Edit: 12/13/2022
- * Authors: _____________________
+ * Last Edit: 5/15/2023
+ * Authors: Oscar Ahuatl & Saifur Rahman
  */
 
 //GAME VARIABLES
@@ -8,8 +8,8 @@ Grid grid = new Grid(6,8);
 PImage bg;
 PImage player1;
 PImage endScreen;
-String titleText = "NameOfYourGame";
-String extraText = "it is i your father";
+String titleText = "Farming Simulater 2k23";
+String extraText = "Start Farming!";
 AnimatedSprite exampleSprite;
 boolean doAnimation;
 

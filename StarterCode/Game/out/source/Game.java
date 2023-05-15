@@ -15,8 +15,49 @@ import java.io.IOException;
 
 public class Game extends PApplet {
 
+<<<<<<< HEAD
 public void setup(){
 /* size commented out by preprocessor */;
+=======
+/* Game Class Starter File
+ * Last Edit: 5/15/2023
+ * Authors: Oscar Ahuatl & Saifur Rahman
+ */
+
+//GAME VARIABLES
+Grid grid = new Grid(6,8);
+PImage bg;
+PImage player1;
+PImage endScreen;
+String titleText = "NameOfYourGame";
+String extraText = "Who's Turn?";
+AnimatedSprite exampleSprite;
+boolean doAnimation;
+
+
+//Required Processing method that gets run once
+public void setup() {
+
+  //Match the screen size to the background image size
+  /* size commented out by preprocessor */;
+
+  //Set the title on the title bar
+  surface.setTitle(titleText);
+
+  //Load images used
+  bg = loadImage("images/chess.jpg");
+  player1 = loadImage("images/x_wood.png");
+  player1.resize(100,100);
+  endScreen = loadImage("images/youwin.png");
+  
+  //Animation & Sprite setup
+  exampleAnimationSetup();
+
+
+  println("Game started...");
+
+  //fullScreen();   //only use if not using a specfic bg image
+>>>>>>> 97d5bd866b39cee7ede7a0f1ce8d573f68bd5478
 }
 public void draw(){
     fill(500, 200, 500);
