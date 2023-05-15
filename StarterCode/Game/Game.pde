@@ -8,7 +8,7 @@ Grid grid = new Grid(6,8);
 PImage bg;
 PImage player1;
 PImage endScreen;
-String titleText = "NameOfYourGame";
+String titleText = "Farming Simulater 2k23";
 String extraText = "Start Farming!";
 AnimatedSprite exampleSprite;
 boolean doAnimation;
