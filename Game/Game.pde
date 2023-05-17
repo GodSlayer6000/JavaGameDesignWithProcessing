@@ -4,9 +4,9 @@
  */
 
 //import processing.sound.*;
-
+import java.util.*;
 //GAME VARIABLES
-Grid grid = new Grid(6,8);
+Grid grid = new Grid(15,15);
 PImage bg;
 PImage player1;
 PImage endScreen;
@@ -16,7 +16,8 @@ AnimatedSprite exampleSprite;
 boolean doAnimation;
 //SoundFile song;
 
-int player1Row = 3;
+int player1Row = 2;
+int player1Col = 2;
 
 
 //Required Processing method that gets run once
@@ -75,20 +76,59 @@ void keyPressed(){
   //What to do when a key is pressed?
   
   //set "w" key to move the player1 up
-  if(keyCode == 87){
+  if(keyCode == 87 && player1Row != 0){
     //check case where out of bounds
     
     //change the field for player1Row
     player1Row--;
 
     //shift the player1 picture up in the 2D array
-    GridLocation loc = new GridLocation(player1Row, 0);
+    GridLocation loc = new GridLocation(player1Row, player1Col);
     grid.setTileImage(loc, player1);
 
     //eliminate the picture from the old location
 
   }
 
+  if(keyCode == 65 && player1Col != 0){
+    //check case where out of bounds
+    
+    //change the field for player1Row
+    player1Col--;
+
+    //shift the player1 picture up in the 2D array
+    GridLocation loc = new GridLocation(player1Row, player1Col);
+    grid.setTileImage(loc, player1);
+
+    //eliminate the picture from the old location
+
+  }
+if(keyCode == 83 && player1Row != 14){
+    //check case where out of bounds
+    
+    //change the field for player1Row
+    player1Row++;
+
+    //shift the player1 picture up in the 2D array
+    GridLocation loc = new GridLocation(player1Row, player1Col);
+    grid.setTileImage(loc, player1);
+
+    //eliminate the picture from the old location
+
+  }
+  if(keyCode == 68 && player1Col != 14){
+    //check case where out of bounds
+    
+    //change the field for player1Row
+    player1Col++;
+
+    //shift the player1 picture up in the 2D array
+    GridLocation loc = new GridLocation(player1Row, player1Col);
+    grid.setTileImage(loc, player1);
+
+    //eliminate the picture from the old location
+
+  }
 }
   //Known Processing method that automatically will run when a mouse click triggers it
   void mouseClicked(){
@@ -133,7 +173,7 @@ public void updateScreen(){
   background(bg);
 
   //Display the Player1 image
-  GridLocation player1Loc = new GridLocation(player1Row,0);
+  GridLocation player1Loc = new GridLocation(player1Row,player1Col);
   grid.setTileImage(player1Loc, player1);
   
   //update other screen elements
