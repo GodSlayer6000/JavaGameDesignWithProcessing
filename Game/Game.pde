@@ -32,7 +32,7 @@ void setup() {
   //bg = loadImage("images/chess.jpg");
   bg = loadImage("images/background.jpg");
   bg.resize(800,600);
-  player1 = loadImage("images/background.jpg");
+  player1 = loadImage("images/newsteve.png");
   player1.resize(grid.getTileWidthPixels(),grid.getTileHeightPixels());
   endScreen = loadImage("images/youwin.png");
 
