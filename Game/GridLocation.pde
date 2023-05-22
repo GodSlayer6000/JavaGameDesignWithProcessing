@@ -33,4 +33,11 @@ public class GridLocation{
     return -1;
   }
  
+public boolean equals(GridLocation otherLoc){
+  if(getXCoord() == otherLoc.getXCoord() && getYCoord() == otherLoc.getYCoord() ){
+    return true;
+  }
+  return false;
+}
+
 }

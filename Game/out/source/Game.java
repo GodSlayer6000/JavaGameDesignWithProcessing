@@ -35,6 +35,7 @@ Grid grid = new Grid(15,15);
 PImage bg;
 PImage player1;
 PImage endScreen;
+PImage enemy;
 String titleText = "Farming Simulater 2k23";
 String extraText = "Start Farming!";
 AnimatedSprite exampleSprite;
@@ -61,6 +62,7 @@ public void setup() {
   player1 = loadImage("images/newsteve.png");
   player1.resize(grid.getTileWidthPixels(),grid.getTileHeightPixels());
   endScreen = loadImage("images/youwin.png");
+  enemy = loadImage("images/zombie.png");
 
   // Load a soundfile from the /data folder of the sketch and play it back
   // song = new SoundFile(this, "sounds/Lenny_Kravitz_Fly_Away.mp3");
@@ -114,8 +116,6 @@ public void keyPressed(){
     //eliminate the picture from the old location
 
   }
-<<<<<<< HEAD
-=======
 
   if(keyCode == 65 && player1Col != 0){
     //check case where out of bounds
@@ -130,7 +130,7 @@ public void keyPressed(){
     //eliminate the picture from the old location
 
   }
-if(keyCode == 83 && player1Row != 14){
+if(keyCode == 83 && player1Row != grid.getRows()-1 ){
     //check case where out of bounds
     
     //change the field for player1Row
@@ -143,7 +143,7 @@ if(keyCode == 83 && player1Row != 14){
     //eliminate the picture from the old location
 
   }
-  if(keyCode == 68 && player1Col != 14){
+  if(keyCode == 68 && player1Col != grid.getCols()-1){
     //check case where out of bounds
     
     //change the field for player1Row
@@ -156,7 +156,6 @@ if(keyCode == 83 && player1Row != 14){
     //eliminate the picture from the old location
 
   }
->>>>>>> 3900deee305d97910c545220166c4f413b0011b9
 }
   //Known Processing method that automatically will run when a mouse click triggers it
   public void mouseClicked(){
@@ -166,6 +165,14 @@ if(keyCode == 83 && player1Row != 14){
     System.out.println("Grid location: " + grid.getGridLocation());
 
     //what to do if clicked? (Make player1 disappear?)
+    GridLocation clickedLoc = grid.getGridLocation();
+    GridLocation player1Loc = new GridLocation(player1Row, player1Col);
+    
+    if(clickedLoc.equals(player1Loc)){
+      player1Col--;
+
+
+    }
 
 
     //Toggle the animation on & off
@@ -202,6 +209,7 @@ public void updateScreen(){
 
   //Display the Player1 image
   GridLocation player1Loc = new GridLocation(player1Row,player1Col);
+  //  GridLocation player1Loc = new GridLocation(5,5);
   grid.setTileImage(player1Loc, player1);
   
   //update other screen elements
@@ -211,6 +219,16 @@ public void updateScreen(){
 
 //Method to populate enemies or other sprites on the screen
 public void populateSprites(){
+  int intCol = grid.getCols()-1;
+  for(int r = 0; r < grid.getRows(); r++){
+    double rando = Math.random();
+    if(rando < 0.1f){
+      grid.setTileImage(new GridLocation(r, intCol), enemy);
+
+    }
+
+  }
+
 
 }
 
@@ -551,6 +569,13 @@ public class GridLocation{
     return -1;
   }
  
+public boolean equals(GridLocation otherLoc){
+  if(getXCoord() == otherLoc.getXCoord() && getYCoord() == otherLoc.getYCoord() ){
+    return true;
+  }
+  return false;
+}
+
 }
 /* GridTile class - Designed to be used within the Grid class
  * GridTiles have distinguishable marks that will be printed out to the console for easy visualization of a 2D array
