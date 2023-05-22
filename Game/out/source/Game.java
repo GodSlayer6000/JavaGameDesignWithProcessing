@@ -114,6 +114,8 @@ public void keyPressed(){
     //eliminate the picture from the old location
 
   }
+<<<<<<< HEAD
+=======
 
   if(keyCode == 65 && player1Col != 0){
     //check case where out of bounds
@@ -154,6 +156,7 @@ if(keyCode == 83 && player1Row != 14){
     //eliminate the picture from the old location
 
   }
+>>>>>>> 3900deee305d97910c545220166c4f413b0011b9
 }
   //Known Processing method that automatically will run when a mouse click triggers it
   public void mouseClicked(){
