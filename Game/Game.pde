@@ -226,7 +226,7 @@ public void populateSprites(){
 
     //10% of the time, decide to add an enemy image to a Tile
     if(rando < 0.1){
-      grid.setTileImage(new GridLocation(r, intCol), enemy);
+      grid.setTileImage(new GridLocation(r, 4), enemy);
 
     }
   }
@@ -308,13 +308,13 @@ public void endGame(){
 
 //example method that creates 5 horses along the screen
 public void exampleAnimationSetup(){  
-  int i = 2;
-  exampleSprite = new AnimatedSprite("sprites/aminezombie.png", 50.0, i*75.0, "sprites/aminezombie.json");
+  int i = 4;
+  exampleSprite = new AnimatedSprite("sprites/texture.png", 50.0, i*75.0, "sprites/texture.json");
 }
 
 //example method that animates the horse Sprites
 public void checkExampleAnimation(){
   if(doAnimation){
-    exampleSprite.animateVertical(5.0, 1.0, true);
+    exampleSprite.animateHorizontal(5.0, 1.0, true);
   }
 }
