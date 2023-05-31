@@ -8,6 +8,7 @@ import java.util.*;
 //GAME VARIABLES
 private int msElapsed = 0;
 Grid grid = new Grid(15,15);
+Grid farmLand = new Grid (6,6);
 PImage bg;
 PImage player1;
 PImage endScreen;
@@ -16,6 +17,7 @@ String titleText = "Farming Simulater 2k23";
 String extraText = "Start Farming!";
 AnimatedSprite exampleSprite;
 boolean doAnimation;
+int health = 100;
 //SoundFile song;
 
 int player1Row = 2;
@@ -39,6 +41,7 @@ void setup() {
   player1.resize(grid.getTileWidthPixels(),grid.getTileHeightPixels());
   endScreen = loadImage("images/youwin.png");
   enemy = loadImage("images/zombie.png");
+  
 
   // Load a soundfile from the /data folder of the sketch and play it back
   // song = new SoundFile(this, "sounds/Lenny_Kravitz_Fly_Away.mp3");
@@ -196,6 +199,7 @@ public void updateScreen(){
   grid.setTileImage(player1Loc, player1);
   
 //Loop through all the Tiles and display its images/sprites
+
   
 
       //Store temporary GridLocation
@@ -222,13 +226,14 @@ public void populateSprites(){
   for(int r = 0; r < grid.getNumRows(); r++){
 
     //Generate a random number
-    double rando = Math.random();
+    double rando = Math.random() * 30 ;
+    int ranrow = (int) (Math.random()*2) +13;
 
     //10% of the time, decide to add an enemy image to a Tile
-    if(rando < 0.1){
-      grid.setTileImage(new GridLocation(r, 4), enemy);
+   if(rando < 0.1){
+     grid.setTileImage(new GridLocation(r, ranrow), enemy);
 
-    }
+   }
   }
 }
 
@@ -245,10 +250,14 @@ public void moveSprites(){
         grid.clearTileSprite(loc);
       }
 
+  
+
 
 
       if(c != 0){
         GridLocation newLoc = new GridLocation(r,c-1);
+        
+        checkCollision(loc, newLoc);
 
         if(grid.hasTileSprite(loc)){
           grid.setTileSprite(newLoc, grid.getTileSprite(loc));
@@ -257,10 +266,13 @@ public void moveSprites(){
         }
 
       }
+    
+  
      
 
     }
   }
+}
       //Store the 2 tile locations to move
 
       //Check if the current tile has an image that is not player1      
@@ -282,9 +294,51 @@ public void moveSprites(){
 
       //CASE 3: Enemy leaves screen at first column
 
-}
+
 
 //Method to handle the collisions between Sprites on the Screen
+public boolean checkCollision(GridLocation loc, GridLocation nextLoc){
+
+//check current location first
+PImage image = grid.getTileImage(loc);
+AnimatedSprite sprite = grid.getTileSprite(loc);
+
+if(image == null && sprite == null){
+  return false;
+}
+
+//check next location
+PImage nextImage = grid.getTileImage(nextLoc);
+AnimatedSprite nextSprite = grid.getTileSprite(nextLoc);
+
+if(nextImage == null && nextSprite == null){
+  return false;
+}
+
+//check if mob hit the player
+if(enemy.equals(image) && player1.equals(nextImage)){
+  System.out.println("you been hit");
+
+  //clear out enemy if it hits
+  grid.clearTileSprite(loc);
+
+  //lose hp
+  System.out.print("lost health: " + health);
+
+  health--;
+  System.out.print("lost health: " + health);
+
+}
+
+
+
+return true;
+
+
+}
+        
+      
+
 public void handleCollisions(){
 
 

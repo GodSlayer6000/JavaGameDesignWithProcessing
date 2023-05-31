@@ -10,6 +10,7 @@ public class Grid{
   private int rows;
   private int cols;
   private GridTile[][] board;
+  private GridTile[][] farmLand;
   
 
   //Grid constructor that will create a Grid with the specified number of rows and cols
