@@ -260,6 +260,7 @@ public void populateSprites(){
 
    }
   }
+  
 }
 
 //Method to move around the enemies/sprites on the screen
