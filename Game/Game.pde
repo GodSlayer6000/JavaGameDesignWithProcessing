@@ -198,7 +198,7 @@ public void updateScreen(){
 
       //Store temporary GridLocation
       
-      //Check if the tile has an image/sprite 
+      //Check if thsssssssssssssssssssssssssssssssssssssssssssssssssssssssse tile has an image/sprite 
       //--> Display the tile's image/sprite
 
 
@@ -226,6 +226,7 @@ public void populateSprites(){
 
     }
   }
+  
 }
 
 //Method to move around the enemies/sprites on the screen
