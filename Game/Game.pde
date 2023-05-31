@@ -90,7 +90,7 @@ void keyPressed(){
   if(keyCode == 87 && player1Row != 0){
     
     //Store old GridLocation
-    GridLocation oldLoc = new GridLocation(player1Row, 0);
+    GridLocation oldLoc = new GridLocation(player1Row, player1Col);
     
     //Erase image from previous location
     grid.clearTileImage(oldLoc);
@@ -103,41 +103,43 @@ void keyPressed(){
   if(keyCode == 65 && player1Col != 0){
     //check case where out of bounds
     
-    //change the field for player1Row
-    player1Col--;
 
     //shift the player1 picture up in the 2D array
-    GridLocation loc = new GridLocation(player1Row, player1Col);
-    grid.setTileImage(loc, player1);
+    GridLocation oldLoc = new GridLocation(player1Row, player1Col);
+    
 
     //eliminate the picture from the old location
+    grid.clearTileImage(oldLoc);
+    //change the field for player1Row
+    player1Col--;
 
   }
 if(keyCode == 83 && player1Row != grid.getNumRows()-1 ){
     //check case where out of bounds
     
-    //change the field for player1Row
-    player1Row++;
-
+    
     //shift the player1 picture up in the 2D array
-    GridLocation loc = new GridLocation(player1Row, player1Col);
-    grid.setTileImage(loc, player1);
+    GridLocation oldLoc = new GridLocation(player1Row, player1Col);
 
     //eliminate the picture from the old location
+    grid.clearTileImage(oldLoc);
+//change the field for player1Row
+    player1Row++;
+
 
   }
   if(keyCode == 68 && player1Col != grid.getNumCols()-1){
     //check case where out of bounds
     
-    //change the field for player1Row
-    player1Col++;
+
 
     //shift the player1 picture up in the 2D array
-    GridLocation loc = new GridLocation(player1Row, player1Col);
-    grid.setTileImage(loc, player1);
+    GridLocation oldLoc = new GridLocation(player1Row, player1Col);
 
     //eliminate the picture from the old location
-
+    grid.clearTileImage(oldLoc);
+    //change the field for player1Row
+    player1Col++;
   }
 }
   //Known Processing method that automatically will run when a mouse click triggers it
@@ -204,6 +206,8 @@ public void updateScreen(){
 
 
   //Update other screen elements
+  grid.showImages();
+  grid.showSprites();
 
 
 }
@@ -222,7 +226,7 @@ public void populateSprites(){
 
     //10% of the time, decide to add an enemy image to a Tile
     if(rando < 0.1){
-      grid.setTileImage(new GridLocation(r, intCol), enemy);
+      grid.setTileImage(new GridLocation(r, 4), enemy);
 
     }
   }
@@ -232,7 +236,31 @@ public void populateSprites(){
 public void moveSprites(){
 
 //Loop through all of the rows & cols in the grid
-  
+  for(int r = 0; r < grid.getNumRows(); r++){
+    for(int c = 0; c < grid.getNumCols(); c++){
+
+      GridLocation loc = new GridLocation(r,c);
+
+      if(c ==0){
+        grid.clearTileSprite(loc);
+      }
+
+
+
+      if(c != 0){
+        GridLocation newLoc = new GridLocation(r,c-1);
+
+        if(grid.hasTileSprite(loc)){
+          grid.setTileSprite(newLoc, grid.getTileSprite(loc));
+          grid.clearTileSprite(loc);
+
+        }
+
+      }
+     
+
+    }
+  }
       //Store the 2 tile locations to move
 
       //Check if the current tile has an image that is not player1      
@@ -280,13 +308,13 @@ public void endGame(){
 
 //example method that creates 5 horses along the screen
 public void exampleAnimationSetup(){  
-  int i = 2;
-  exampleSprite = new AnimatedSprite("sprites/horse_run.png", 50.0, i*75.0, "sprites/horse_run.json");
+  int i = 4;
+  exampleSprite = new AnimatedSprite("sprites/texture.png", 50.0, i*75.0, "sprites/texture.json");
 }
 
 //example method that animates the horse Sprites
 public void checkExampleAnimation(){
   if(doAnimation){
-    exampleSprite.animateVertical(5.0, 1.0, true);
+    exampleSprite.animateHorizontal(5.0, 1.0, true);
   }
 }
