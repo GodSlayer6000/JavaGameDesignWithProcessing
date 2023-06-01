@@ -315,6 +315,7 @@ public void exampleAnimationSetup(){
 //example method that animates the horse Sprites
 public void checkExampleAnimation(){
   if(doAnimation){
+    exampleSprite.resize(200,200);
     exampleSprite.animateHorizontal(5.0, 1.0, true);
   }
 }
