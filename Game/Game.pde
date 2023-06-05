@@ -325,7 +325,7 @@ if(enemy.equals(image) && player1.equals(nextImage)){
   grid.clearTileSprite(loc);
 
   //lose hp
-  System.out.print("lost health: " + health);
+  System.out.println("lost health: " + health);
 
   health--;
   System.out.print("lost health: " + health);
