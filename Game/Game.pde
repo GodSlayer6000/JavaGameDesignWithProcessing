@@ -41,6 +41,7 @@ void setup() {
   player1.resize(grid.getTileWidthPixels(),grid.getTileHeightPixels());
   endScreen = loadImage("images/youwin.png");
   enemy = loadImage("images/zombie.png");
+  enemy.resize(50,50);
   
 
   // Load a soundfile from the /data folder of the sketch and play it back
