@@ -18,6 +18,7 @@ String extraText = "Start Farming!";
 AnimatedSprite exampleSprite;
 boolean doAnimation;
 int health = 100;
+int money = 0;
 //SoundFile song;
 
 int player1Row = 2;
@@ -180,7 +181,7 @@ public void updateTitleBar(){
 
   if(!isGameOver()) {
     //set the title each loop
-    surface.setTitle(titleText + "    " + extraText);
+    surface.setTitle(titleText + "    " + extraText + "Health bar: " + health);
 
     //adjust the extra text as desired
   
@@ -227,7 +228,7 @@ public void populateSprites(){
   for(int r = 0; r < grid.getNumRows(); r++){
 
     //Generate a random number
-    double rando = Math.random() * 30 ;
+    double rando = Math.random() * 10 ;
     int ranrow = (int) (Math.random()*2) +13;
 
     //10% of the time, decide to add an enemy image to a Tile
@@ -249,7 +250,7 @@ public void moveSprites(){
       GridLocation loc = new GridLocation(r,c);
 
       if(c ==0){
-        grid.clearTileSprite(loc);
+        grid.clearTileImage(loc);
       }
 
   
@@ -257,13 +258,36 @@ public void moveSprites(){
 
 
       if(c != 0){
-        GridLocation newLoc = new GridLocation(r,c-1);
+        GridLocation newLoc;
+        if (player1Row < r){
+          newLoc = new GridLocation(r-1,c);
+        } else if (player1Row > r){
+          newLoc = new GridLocation(r+1,c);
+        } else if (player1Col > c){
+          newLoc = new GridLocation(r,c+1);
+        } else {
+          newLoc = new GridLocation(r,c-1);
+        }
+
         
         checkCollision(loc, newLoc);
 
-        if(grid.hasTileSprite(loc)){
-          grid.setTileSprite(newLoc, grid.getTileSprite(loc));
-          grid.clearTileSprite(loc);
+        if(grid.hasTileImage(loc)   && !loc.equals( new GridLocation(player1Row, player1Col))    ){
+          grid.setTileImage(newLoc, grid.getTileImage(loc));
+          grid.clearTileImage(loc);
+
+        }
+
+      }
+
+      if(r != 0 && r < grid.getNumRows()){
+        GridLocation newLoc = new GridLocation(r-1 ,c);
+        
+        checkCollision(loc, newLoc);
+
+        if(grid.hasTileImage(loc)   && !loc.equals( new GridLocation(player1Row, player1Col))    ){
+          grid.setTileImage(newLoc, grid.getTileImage(loc));
+          grid.clearTileImage(loc);
 
         }
 
@@ -313,9 +337,9 @@ if(image == null && sprite == null){
 PImage nextImage = grid.getTileImage(nextLoc);
 AnimatedSprite nextSprite = grid.getTileSprite(nextLoc);
 
-if(nextImage == null && nextSprite == null){
-  return false;
-}
+//if(nextImage == null && nextSprite == null){
+//  return false;
+//}
 
 //check if mob hit the player
 if(enemy.equals(image) && player1.equals(nextImage)){
@@ -323,12 +347,28 @@ if(enemy.equals(image) && player1.equals(nextImage)){
 
   //clear out enemy if it hits
   grid.clearTileSprite(loc);
+  int cash = (int)(Math.random() * 10) + 5;
 
+  money+=cash;
+  System.out.println("Cash: " + money);
+  
+
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
   //lose hp
   System.out.println("lost health: " + health);
 
   health--;
   System.out.print("lost health: " + health);
+  
 
 }
 
