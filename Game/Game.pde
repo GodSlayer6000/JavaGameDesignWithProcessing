@@ -318,20 +318,20 @@ public void moveSprites(){
         }
 
       }
-
+     
       // What does this section do???
-      if(r != 0 && r < currentGrid.getNumRows()){
-        GridLocation newLoc = new GridLocation(r-1 ,c);
+      // if(r != 0 && r < currentGrid.getNumRows()){
+      //   GridLocation newLoc = new GridLocation(r-1 ,c);
         
-        checkCollision(loc, newLoc);
+      //   checkCollision(loc, newLoc);
 
-        if(currentGrid.hasTileImage(loc)   && !loc.equals( new GridLocation(player1Row, player1Col))    ){
-          currentGrid.setTileImage(newLoc, currentGrid.getTileImage(loc));
-          currentGrid.clearTileImage(loc);
+      //   if(currentGrid.hasTileImage(loc)   && !loc.equals( new GridLocation(player1Row, player1Col))    ){
+      //     currentGrid.setTileImage(newLoc, currentGrid.getTileImage(loc));
+      //     currentGrid.clearTileImage(loc);
 
-        }
+      //   }
 
-      }
+      // }
     
   
      
@@ -382,7 +382,8 @@ AnimatedSprite nextSprite = currentGrid.getTileSprite(nextLoc);
 //}
 
 //check if mob hit the player
-if(enemy.equals(image) && player1.equals(nextImage)){
+//if(enemy.equals(image) && player1.equals(nextImage)){
+if(player1.equals(nextImage) && enemy.equals(image)){
   System.out.println("you been hit");
 
   //clear out enemy if it hits
