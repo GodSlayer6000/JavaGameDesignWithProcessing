@@ -13,7 +13,8 @@ String extraText = "Start Farming!";
 
 //Screens
 Screen currentScreen;
-Grid grid;
+World currentWorld;
+Grid currentGrid;
 
 //Splash Screen Variables
 Screen splashScreen;
@@ -69,7 +70,7 @@ void setup() {
   mainGrid = new Grid("farm", mainBg, 15,15);
   endScreen = new World("end", endBg);
   currentScreen = splashScreen;
-  grid= mainGrid;
+  currentGrid= mainGrid;
 
   //setup the sprites
   player1 = loadImage(player1File);
@@ -113,7 +114,7 @@ void draw() {
   checkExampleAnimation();
   
   msElapsed +=100;
-  grid.pause(100);
+  currentScreen.pause(100);
 
 }
 
@@ -132,7 +133,7 @@ void keyPressed(){
     GridLocation oldLoc = new GridLocation(player1Row, player1Col);
     
     //Erase image from previous location
-    grid.clearTileImage(oldLoc);
+    currentGrid.clearTileImage(oldLoc);
 
     //change the field for player1Row
     player1Row--;
@@ -148,12 +149,12 @@ void keyPressed(){
     
 
     //eliminate the picture from the old location
-    grid.clearTileImage(oldLoc);
+    currentGrid.clearTileImage(oldLoc);
     //change the field for player1Row
     player1Col--;
 
   }
-if(keyCode == 83 && player1Row != grid.getNumRows()-1 ){
+if(keyCode == 83 && player1Row != currentGrid.getNumRows()-1 ){
     //check case where out of bounds
     
     
@@ -161,13 +162,13 @@ if(keyCode == 83 && player1Row != grid.getNumRows()-1 ){
     GridLocation oldLoc = new GridLocation(player1Row, player1Col);
 
     //eliminate the picture from the old location
-    grid.clearTileImage(oldLoc);
+    currentGrid.clearTileImage(oldLoc);
 //change the field for player1Row
     player1Row++;
 
 
   }
-  if(keyCode == 68 && player1Col != grid.getNumCols()-1){
+  if(keyCode == 68 && player1Col != currentGrid.getNumCols()-1){
     //check case where out of bounds
     
 
@@ -176,7 +177,7 @@ if(keyCode == 83 && player1Row != grid.getNumRows()-1 ){
     GridLocation oldLoc = new GridLocation(player1Row, player1Col);
 
     //eliminate the picture from the old location
-    grid.clearTileImage(oldLoc);
+    currentGrid.clearTileImage(oldLoc);
     //change the field for player1Row
     player1Col++;
   }
@@ -184,12 +185,14 @@ if(keyCode == 83 && player1Row != grid.getNumRows()-1 ){
   //Known Processing method that automatically will run when a mouse click triggers it
   void mouseClicked(){
   
-    //check if click was successful
-    System.out.println("Mouse was clicked at (" + mouseX + "," + mouseY + ")");
-    System.out.println("Grid location: " + grid.getGridLocation());
+  //check if click was successful
+  System.out.println("Mouse was clicked at (" + mouseX + "," + mouseY + ")");
+  if(currentGrid != null){
+    System.out.println("Grid location: " + currentGrid.getGridLocation());
+  }
 
     //what to do if clicked?
-    GridLocation clickedLoc = grid.getGridLocation();
+    GridLocation clickedLoc = currentGrid.getGridLocation();
     GridLocation player1Loc = new GridLocation(player1Row, player1Col);
     
     if(clickedLoc.equals(player1Loc)){
@@ -197,10 +200,12 @@ if(keyCode == 83 && player1Row != grid.getNumRows()-1 ){
     }
 
 
-    //Toggle the animation on & off
-    doAnimation = !doAnimation;
-    System.out.println("doAnimation: " + doAnimation);
-    grid.setMark("X",grid.getGridLocation());
+  //Toggle the animation on & off
+  doAnimation = !doAnimation;
+  System.out.println("doAnimation: " + doAnimation);
+  if(currentGrid != null){
+    currentGrid.setMark("X",currentGrid.getGridLocation());
+  }
     
   }
 
@@ -236,18 +241,21 @@ public void updateScreen(){
 
   //skyGrid Screen Updates
   if(currentScreen == mainGrid){
+    currentGrid = mainGrid;
 
     //Display the Player1 image
     GridLocation player1Loc = new GridLocation(player1Row,player1Col);
     //GridLocation player1Loc = new GridLocation(5,5);
-    grid.setTileImage(player1Loc, player1);
+    currentGrid.setTileImage(player1Loc, player1);
 
     //Update other screen elements
-    grid.showImages();
-    grid.showSprites();
-    grid.showGridSprites();
+    currentGrid.showImages();
+    currentGrid.showSprites();
+    currentGrid.showGridSprites();
       
   }
+
+  //Update other screens?
 
 
 
@@ -258,10 +266,10 @@ public void updateScreen(){
 public void populateSprites(){
 
   //What is the index for the last column?
-  int intCol = grid.getNumCols()-1;
+  int intCol = currentGrid.getNumCols()-1;
 
   //Loop through all the rows in the last column
-  for(int r = 0; r < grid.getNumRows(); r++){
+  for(int r = 0; r < currentGrid.getNumRows(); r++){
 
     //Generate a random number
     double rando = Math.random() * 10 ;
@@ -269,7 +277,7 @@ public void populateSprites(){
 
     //10% of the time, decide to add an enemy image to a Tile
    if(rando < 0.1){
-     grid.setTileImage(new GridLocation(r, ranrow), enemy);
+     currentGrid.setTileImage(new GridLocation(r, ranrow), enemy);
 
    }
   }
@@ -280,13 +288,13 @@ public void populateSprites(){
 public void moveSprites(){
 
 //Loop through all of the rows & cols in the grid
-  for(int r = 0; r < grid.getNumRows(); r++){
-    for(int c = 0; c < grid.getNumCols(); c++){
+  for(int r = 0; r < currentGrid.getNumRows(); r++){
+    for(int c = 0; c < currentGrid.getNumCols(); c++){
 
       GridLocation loc = new GridLocation(r,c);
 
       if(c ==0){
-        grid.clearTileImage(loc);
+        currentGrid.clearTileImage(loc);
       }
       else if(c != 0){
         GridLocation newLoc;
@@ -303,23 +311,23 @@ public void moveSprites(){
         
         checkCollision(loc, newLoc);
 
-        if(grid.hasTileImage(loc)   && !loc.equals( new GridLocation(player1Row, player1Col))    ){
-          grid.setTileImage(newLoc, grid.getTileImage(loc));
-          grid.clearTileImage(loc);
+        if(currentGrid.hasTileImage(loc)   && !loc.equals( new GridLocation(player1Row, player1Col))    ){
+          currentGrid.setTileImage(newLoc, currentGrid.getTileImage(loc));
+          currentGrid.clearTileImage(loc);
 
         }
 
       }
 
       // What does this section do???
-      if(r != 0 && r < grid.getNumRows()){
+      if(r != 0 && r < currentGrid.getNumRows()){
         GridLocation newLoc = new GridLocation(r-1 ,c);
         
         checkCollision(loc, newLoc);
 
-        if(grid.hasTileImage(loc)   && !loc.equals( new GridLocation(player1Row, player1Col))    ){
-          grid.setTileImage(newLoc, grid.getTileImage(loc));
-          grid.clearTileImage(loc);
+        if(currentGrid.hasTileImage(loc)   && !loc.equals( new GridLocation(player1Row, player1Col))    ){
+          currentGrid.setTileImage(newLoc, currentGrid.getTileImage(loc));
+          currentGrid.clearTileImage(loc);
 
         }
 
@@ -347,7 +355,7 @@ public void moveSprites(){
         
         //Erase image/sprite from old location
         
-        //System.out.println(loc + " " + grid.hasTileImage(loc));
+        //System.out.println(loc + " " + currentGrid.hasTileImage(loc));
 
 
       //CASE 3: Enemy leaves screen at first column
@@ -358,16 +366,16 @@ public void moveSprites(){
 public boolean checkCollision(GridLocation loc, GridLocation nextLoc){
 
 //check current location first
-PImage image = grid.getTileImage(loc);
-AnimatedSprite sprite = grid.getTileSprite(loc);
+PImage image = currentGrid.getTileImage(loc);
+AnimatedSprite sprite = currentGrid.getTileSprite(loc);
 
 if(image == null && sprite == null){
   return false;
 }
 
 //check next location
-PImage nextImage = grid.getTileImage(nextLoc);
-AnimatedSprite nextSprite = grid.getTileSprite(nextLoc);
+PImage nextImage = currentGrid.getTileImage(nextLoc);
+AnimatedSprite nextSprite = currentGrid.getTileSprite(nextLoc);
 
 //if(nextImage == null && nextSprite == null){
 //  return false;
@@ -378,7 +386,7 @@ if(enemy.equals(image) && player1.equals(nextImage)){
   System.out.println("you been hit");
 
   //clear out enemy if it hits
-  grid.clearTileSprite(loc);
+  currentGrid.clearTileSprite(loc);
   int cash = (int)(Math.random() * 10) + 5;
 
   money+=cash;
