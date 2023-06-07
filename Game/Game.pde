@@ -5,24 +5,46 @@
 
 //import processing.sound.*;
 import java.util.*;
+
 //GAME VARIABLES
 private int msElapsed = 0;
-Grid grid = new Grid(15,15);
-Grid farmLand = new Grid (6,6);
-PImage bg;
-PImage player1;
-PImage endScreen;
-PImage enemy;
 String titleText = "Farming Simulater 2k23";
 String extraText = "Start Farming!";
-AnimatedSprite exampleSprite;
-boolean doAnimation;
-int health = 100;
-int money = 0;
-//SoundFile song;
 
+//Screens
+Screen currentScreen;
+Grid grid;
+
+//Splash Screen Variables
+Screen splashScreen;
+String splashBgFile = "images/background.jpg";
+PImage splashBg;
+
+//Main Screen Variables
+Grid mainGrid;
+//Grid farmLand; //6x6??
+String mainBgFile = "images/farm.png";
+PImage mainBg;
+
+PImage player1;
+String player1File = "images/newsteve.png";
 int player1Row = 2;
 int player1Col = 2;
+int health = 100;
+int money = 0;
+
+PImage enemy;
+String enemyFile = "images/zombie.png";
+
+//EndScreen variables
+World endScreen;
+PImage endBg;
+String endBgFile = "images/youwin.png";
+
+//Example Variables
+//SoundFile song;
+AnimatedSprite exampleSprite;
+boolean doAnimation;
 
 
 //Required Processing method that gets run once
@@ -34,17 +56,30 @@ void setup() {
   //Set the title on the title bar
   surface.setTitle(titleText);
 
-  //Load images used
-  //bg = loadImage("images/chess.jpg");
-  bg = loadImage("images/background.jpg");
-  bg.resize(800,600);
-  player1 = loadImage("images/newsteve.png");
-  player1.resize(grid.getTileWidthPixels(),grid.getTileHeightPixels());
-  endScreen = loadImage("images/youwin.png");
-  enemy = loadImage("images/zombie.png");
+  //Load BG images used
+  splashBg = loadImage(splashBgFile);
+  splashBg.resize(800,600);
+  mainBg = loadImage(mainBgFile);
+  mainBg.resize(800,600);
+  endBg = loadImage(endBgFile);
+  endBg.resize(800,600);
+
+  //setup the screens/worlds/grids in the Game
+  splashScreen = new Screen("splash", splashBg);
+  mainGrid = new Grid("farm", mainBg, 15,15);
+  endScreen = new World("end", endBg);
+  currentScreen = splashScreen;
+  grid= mainGrid;
+
+  //setup the sprites
+  player1 = loadImage(player1File);
+  //player1.resize(mainGrid.getTileWidthPixels(),mainGrid.getTileHeightPixels());
+  player1.resize(75,75);
+  enemy = loadImage(enemyFile);
   enemy.resize(50,50);
   
 
+  //Other Setup
   // Load a soundfile from the /data folder of the sketch and play it back
   // song = new SoundFile(this, "sounds/Lenny_Kravitz_Fly_Away.mp3");
   // song.play();
@@ -54,7 +89,6 @@ void setup() {
 
   imageMode(CORNER);    //Set Images to read coordinates at corners
   //fullScreen();   //only use if not using a specfic bg image
-  
   println("Game started...");
   
 }
@@ -65,7 +99,7 @@ void draw() {
 
   updateTitleBar();
 
-  if (msElapsed % 300 == 0) {
+  if (msElapsed % 500 == 0) {
     populateSprites();
     moveSprites();
   }
@@ -192,28 +226,30 @@ public void updateTitleBar(){
 //method to update what is drawn on the screen each frame
 public void updateScreen(){
 
-  //update the background
-  background(bg);
+  //Update the Background
+  background(currentScreen.getBg());
 
-  //Display the Player1 image
-  GridLocation player1Loc = new GridLocation(player1Row,player1Col);
-  //  GridLocation player1Loc = new GridLocation(5,5);
-  grid.setTileImage(player1Loc, player1);
-  
-//Loop through all the Tiles and display its images/sprites
+  //splashScreen update
+  if(splashScreen.getScreenTime() > 3000 && splashScreen.getScreenTime() < 5000){
+    currentScreen = mainGrid;
+  }
 
-  
+  //skyGrid Screen Updates
+  if(currentScreen == mainGrid){
 
-      //Store temporary GridLocation
+    //Display the Player1 image
+    GridLocation player1Loc = new GridLocation(player1Row,player1Col);
+    //GridLocation player1Loc = new GridLocation(5,5);
+    grid.setTileImage(player1Loc, player1);
+
+    //Update other screen elements
+    grid.showImages();
+    grid.showSprites();
+    grid.showGridSprites();
       
-      //Check if thsssssssssssssssssssssssssssssssssssssssssssssssssssssssse tile has an image/sprite 
-      //--> Display the tile's image/sprite
+  }
 
 
-
-  //Update other screen elements
-  grid.showImages();
-  grid.showSprites();
 
 
 }
@@ -252,12 +288,7 @@ public void moveSprites(){
       if(c ==0){
         grid.clearTileImage(loc);
       }
-
-  
-
-
-
-      if(c != 0){
+      else if(c != 0){
         GridLocation newLoc;
         if (player1Row < r){
           newLoc = new GridLocation(r-1,c);
@@ -280,6 +311,7 @@ public void moveSprites(){
 
       }
 
+      // What does this section do???
       if(r != 0 && r < grid.getNumRows()){
         GridLocation newLoc = new GridLocation(r-1 ,c);
         
@@ -351,18 +383,7 @@ if(enemy.equals(image) && player1.equals(nextImage)){
 
   money+=cash;
   System.out.println("Cash: " + money);
-  
-
-
-  
-  
-  
-  
-  
-  
-  
-  
-  
+    
   //lose hp
   System.out.println("lost health: " + health);
 
@@ -398,7 +419,8 @@ public void endGame(){
     //Update the title bar
 
     //Show any end imagery
-    image(endScreen, 100,100);
+    currentScreen = endScreen;
+    //image(endBg, 100,100);
 
 }
 
