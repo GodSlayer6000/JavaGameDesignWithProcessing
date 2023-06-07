@@ -62,6 +62,8 @@ int money = 0;
 
 PImage enemy;
 String enemyFile = "images/zombie.png";
+PImage carrot;
+String carrotFile = "images/carrot.png";
 
 //EndScreen variables
 World endScreen;
@@ -104,6 +106,8 @@ public void setup() {
   player1.resize(75,75);
   enemy = loadImage(enemyFile);
   enemy.resize(50,50);
+  carrot = loadImage(carrotFile);
+  carrot.resize(50,50);
   
 
   //Other Setup
@@ -246,7 +250,7 @@ public void updateTitleBar(){
 
   if(!isGameOver()) {
     //set the title each loop
-    surface.setTitle(titleText + "    " + extraText + "Health bar: " + health);
+    surface.setTitle(titleText + "    " + extraText + "Health bar: " + health + "Cash: " + money);
 
     //adjust the extra text as desired
   
@@ -301,12 +305,42 @@ public void populateSprites(){
     double rando = Math.random() * 10 ;
     int ranrow = (int) (Math.random()*2) +13;
 
+    // double ran = Math.random() * 5 ;
+    // int ranR = (int) (Math.random()*2) +13;
+
     //10% of the time, decide to add an enemy image to a Tile
    if(rando < 0.1f){
      currentGrid.setTileImage(new GridLocation(r, ranrow), enemy);
 
    }
+    // if(ran < 0.1){
+    //   currentGrid.setTileImage(new GridLocation(r, ranR), carrot);
+
+    // }
+  
   }
+
+  
+   //int intCol = currentGrid.getNumCols()-1;
+
+  //Loop through all the rows in the last column
+  for(int r = 0; r < currentGrid.getNumRows(); r++){
+
+    //Generate a random number
+    
+    double ran = Math.random() * 5 ;
+    int ranR = (int) (Math.random()*10) +2;
+
+    //10% of the time, decide to add an enemy image to a Tile
+   
+    if(ran < 0.1f){
+      currentGrid.setTileImage(new GridLocation(r, ranR), carrot);
+
+    }
+  
+  }
+
+  
   
 }
 
@@ -324,6 +358,12 @@ public void moveSprites(){
       }
       else if(c != 0){
         GridLocation newLoc;
+
+
+        //zombies
+        if(currentGrid.getTileImage(loc) == enemy){
+
+        
         if (player1Row < r){
           newLoc = new GridLocation(r-1,c);
         } else if (player1Row > r){
@@ -333,7 +373,7 @@ public void moveSprites(){
         } else {
           newLoc = new GridLocation(r,c-1);
         }
-
+   
         
         checkCollision(loc, newLoc);
 
@@ -342,6 +382,7 @@ public void moveSprites(){
           currentGrid.clearTileImage(loc);
 
         }
+     }
 
       }
 
