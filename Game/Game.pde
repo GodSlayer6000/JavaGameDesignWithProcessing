@@ -465,11 +465,15 @@ public boolean isGameOver(){
 //method to describe what happens after the game is over
 public void endGame(){
     System.out.println("Game Over!");
-
+    if( money >= 4000){
+      currentScreen = endScreen;
+    } else ( health <= 0){
+      //currentScreen = deathScreen;
+    }
     //Update the title bar
 
     //Show any end imagery
-    currentScreen = endScreen;
+    
     //image(endBg, 100,100);
 
 }

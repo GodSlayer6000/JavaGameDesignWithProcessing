@@ -385,7 +385,7 @@ public void moveSprites(){
      }
 
       }
-
+     
       // What does this section do???
       // if(r != 0 && r < currentGrid.getNumRows()){
       //   GridLocation newLoc = new GridLocation(r-1 ,c);
