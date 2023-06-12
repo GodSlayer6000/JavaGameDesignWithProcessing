@@ -39,10 +39,16 @@ String enemyFile = "images/zombie.png";
 PImage carrot;
 String carrotFile = "images/carrot.png";
 
+
 //EndScreen variables
 World endScreen;
 PImage endBg;
 String endBgFile = "images/youwin.png";
+
+World loseScreen;
+PImage youLose;
+String loseBgFile = "images/youLose.png";
+
 
 //Example Variables
 //SoundFile song;
@@ -66,11 +72,15 @@ void setup() {
   mainBg.resize(800,600);
   endBg = loadImage(endBgFile);
   endBg.resize(800,600);
+  youLose = loadImage(loseBgFile);
+  youLose.resize(800,600);
+ 
 
   //setup the screens/worlds/grids in the Game
   splashScreen = new Screen("splash", splashBg);
   mainGrid = new Grid("farm", mainBg, 15,15);
   endScreen = new World("end", endBg);
+  loseScreen = new World("lose", youLose);
   currentScreen = splashScreen;
   currentGrid= mainGrid;
 
@@ -135,6 +145,9 @@ void keyPressed(){
     
     //Store old GridLocation
     GridLocation oldLoc = new GridLocation(player1Row, player1Col);
+
+    //check for collisions
+    checkCollision(oldLoc, new GridLocation(player1Row-1, player1Col));
     
     //Erase image from previous location
     currentGrid.clearTileImage(oldLoc);
@@ -150,6 +163,10 @@ void keyPressed(){
 
     //shift the player1 picture up in the 2D array
     GridLocation oldLoc = new GridLocation(player1Row, player1Col);
+
+    //check for collisions
+    checkCollision(oldLoc, new GridLocation(player1Row, player1Col-1));
+
     
 
     //eliminate the picture from the old location
@@ -165,6 +182,10 @@ if(keyCode == 83 && player1Row != currentGrid.getNumRows()-1 ){
     //shift the player1 picture up in the 2D array
     GridLocation oldLoc = new GridLocation(player1Row, player1Col);
 
+        //check for collisions
+    checkCollision(oldLoc, new GridLocation(player1Row+1, player1Col));
+
+
     //eliminate the picture from the old location
     currentGrid.clearTileImage(oldLoc);
 //change the field for player1Row
@@ -179,6 +200,10 @@ if(keyCode == 83 && player1Row != currentGrid.getNumRows()-1 ){
 
     //shift the player1 picture up in the 2D array
     GridLocation oldLoc = new GridLocation(player1Row, player1Col);
+
+        //check for collisions
+    checkCollision(oldLoc, new GridLocation(player1Row, player1Col+1));
+
 
     //eliminate the picture from the old location
     currentGrid.clearTileImage(oldLoc);
@@ -205,11 +230,11 @@ if(keyCode == 83 && player1Row != currentGrid.getNumRows()-1 ){
 
 
   //Toggle the animation on & off
-  doAnimation = !doAnimation;
-  System.out.println("doAnimation: " + doAnimation);
-  if(currentGrid != null){
-    currentGrid.setMark("X",currentGrid.getGridLocation());
-  }
+  // doAnimation = !doAnimation;
+  // System.out.println("doAnimation: " + doAnimation);
+  // if(currentGrid != null){
+  //   currentGrid.setMark("X",currentGrid.getGridLocation());
+  // }
     
   }
 
@@ -408,45 +433,58 @@ public boolean checkCollision(GridLocation loc, GridLocation nextLoc){
 
 //check current location first
 PImage image = currentGrid.getTileImage(loc);
-AnimatedSprite sprite = currentGrid.getTileSprite(loc);
+//AnimatedSprite sprite = currentGrid.getTileSprite(loc);
 
-if(image == null && sprite == null){
+//if no enemy
+if(image == null ){
   return false;
 }
 
 //check next location
 PImage nextImage = currentGrid.getTileImage(nextLoc);
-AnimatedSprite nextSprite = currentGrid.getTileSprite(nextLoc);
+//AnimatedSprite nextSprite = currentGrid.getTileSprite(nextLoc);
 
-//if(nextImage == null && nextSprite == null){
-//  return false;
-//}
+//if there's no player there
+if(nextImage == null){
+ return false;
+}
 
 //check if mob hit the player
-//if(enemy.equals(image) && player1.equals(nextImage)){
 if(player1.equals(nextImage) && enemy.equals(image)){
   System.out.println("you been hit");
 
-  //clear out enemy if it hits
   currentGrid.clearTileSprite(loc);
   int cash = (int)(Math.random() * 10) + 5;
-
-  money+=cash;
+  money-=cash;
   System.out.println("Cash: " + money);
+  if (money <= 0){
+  money = 0;
+}
+
+  //clear out enemy if it hits
+  currentGrid.clearTileSprite(loc);
     
   //lose hp
-  System.out.println("lost health: " + health);
-
   health--;
   System.out.print("lost health: " + health);
   
 
 }
 
+//player hits enemy
+if(enemy.equals(nextImage) && player1.equals(image)){
+  currentGrid.clearTileSprite(loc);
+  int cash = (int)(Math.random() * 10) + 5;
+  money+=cash;
+  System.out.println("Cash: " + money);
 
-
+}
+if(carrot.equals(nextImage) && player1.equals(image)){
+  if(health >= 100){
+  health = 100;
+}else health++;
+}
 return true;
-
 
 }
         
@@ -459,17 +497,25 @@ public void handleCollisions(){
 
 //method to indicate when the main game is over
 public boolean isGameOver(){
-  return false; //by default, the game is never over
+  if( money >= 4000){
+      currentScreen = endScreen;
+  
+    } 
+    else if(health <= 75){
+      currentScreen = loseScreen;
+       
+   
+    }
+    return false;
+
 }
 
 //method to describe what happens after the game is over
 public void endGame(){
     System.out.println("Game Over!");
-    if( money >= 4000){
-      currentScreen = endScreen;
-    } else ( health <= 0){
+    
       //currentScreen = deathScreen;
-    }
+    
     //Update the title bar
 
     //Show any end imagery
